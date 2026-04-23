@@ -1,0 +1,76 @@
+.tickets-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tickets-toolbar {
+  display: flex; flex-wrap: wrap;
+  align-items: center; justify-content: space-between;
+  gap: 12px; padding: 14px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.tickets-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+
+.tab {
+  padding: 6px 14px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+}
+.tab:hover { background-color: var(--color-surface-alt); color: var(--color-text); }
+.tab.active {
+  background-color: var(--color-primary); color: #fff;
+  border-color: var(--color-primary);
+}
+
+.tickets-search { display: flex; gap: 8px; align-items: center; }
+.tickets-search .form-input { width: 240px; }
+
+.tickets-list { display: flex; flex-direction: column; gap: 10px; }
+
+.ticket-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 140px 140px;
+  gap: 16px; padding: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  align-items: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ticket-row:hover { border-color: var(--color-border-dark); box-shadow: var(--shadow-sm); }
+.ticket-col { min-width: 0; }
+.ticket-title {
+  font-weight: 600; color: var(--color-text);
+  margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ticket-meta { font-size: 12px; color: var(--color-text-muted); }
+
+.col-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.col-value { font-weight: 600; color: var(--color-text); font-size: 13px; }
+.ticket-col-action { text-align: right; }
+
+.tickets-pagination {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 20px; padding: 12px 4px;
+}
+.pagination-info { font-size: 13px; color: var(--color-text-muted); }
+.pagination-controls { display: flex; gap: 4px; }
+
+@media (max-width: 900px) {
+  .ticket-row { grid-template-columns: 1fr 1fr; }
+}
