@@ -30,12 +30,12 @@ function SubmitTicketPage() {
               <label className="form-label">Category *</label>
               <select className="form-select" defaultValue="">
                 <option value="" disabled>Select a category...</option>
-                <option>IT Support</option>
+                <option>IT & Equipment Support</option>
                 <option>Facilities</option>
                 <option>Library</option>
+                <option>Maintenance</option>
 
               </select>
-              <div className="form-hint">e.g. IT Support, Facilities, Library...</div>
             </div>
 
             <div className="form-group">
@@ -48,7 +48,6 @@ function SubmitTicketPage() {
                 <option>Block C — Lab 204</option>
                 <option>Cafeteria</option>
               </select>
-              <div className="form-hint">e.g. Block A, Main Library...</div>
             </div>
           </div>
 
@@ -62,7 +61,7 @@ function SubmitTicketPage() {
             <label className="form-label">Description *</label>
             <textarea
               className="form-textarea"
-              placeholder="Provide a detailed description of the issue. Include when it started, how it affects you, and any steps already taken..."
+             
               maxLength={500}
             />
             <div className="form-hint">Max 500 characters</div>
@@ -90,16 +89,16 @@ function SubmitTicketPage() {
             <div className="kv"><span>SUBMITTED BY</span><strong>Student Name</strong></div>
             <div className="kv"><span>STUDENT ID</span><strong>STU-20250001</strong></div>
             <div className="kv"><span>DATE</span><strong>26 Feb 2026</strong></div>
-            <div className="kv"><span>STATUS</span><strong>Draft</strong></div>
+            <div className="kv"><span>STATUS</span><strong>In progress</strong></div>
           </div>
 
           <div className="card sidebar-section">
             <h4>Categories</h4>
             <ul className="cat-list">
-              <li>IT Support</li>
+              <li>IT & Equipment Support</li>
               <li>Facilities</li>
               <li>Library</li>
-              <li>Other</li>
+              <li>Maintenance</li>
             </ul>
             <Link to="/my-tickets" className="btn btn-secondary btn-block">View My Tickets →</Link>
           </div>

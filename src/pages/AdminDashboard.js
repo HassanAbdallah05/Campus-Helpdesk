@@ -62,13 +62,9 @@ function AdminDashboard() {
         <div className="flex-between">
           <div>
             <h1 className="page-title">Admin Panel</h1>
-            <p className="page-subtitle">
-              Manage, assign, and update all helpdesk tickets across the university.
-            </p>
           </div>
           <div className="admin-toolbar">
             <input className="form-input" type="text" placeholder="Search tickets..." />
-            <button className="btn btn-secondary">Export CSV</button>
           </div>
         </div>
       </div>
@@ -106,10 +102,9 @@ function AdminDashboard() {
         </div>
         <select className="form-select">
           <option>Category: All</option>
-          <option>IT Support</option>
+          <option>IT Support & Equipment Support</option>
           <option>Facilities</option>
           <option>Library</option>
-          <option>Other</option>
         </select>
       </div>
 

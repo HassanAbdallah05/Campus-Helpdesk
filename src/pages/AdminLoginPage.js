@@ -11,8 +11,7 @@ function AdminLoginPage() {
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="form-group">
           <label className="form-label">Staff / Employee ID</label>
-          <input className="form-input" type="text" placeholder="e.g. ADM-20260001" />
-          <div className="form-hint">Your university staff identification number</div>
+          <input className="form-input" type="text" />
         </div>
 
         <div className="form-group">

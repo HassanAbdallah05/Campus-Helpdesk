@@ -13,22 +13,22 @@ function SignUpPage() {
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">First Name</label>
-              <input className="form-input" type="text" placeholder="e.g. Ahmed" />
+              <input className="form-input" type="text"  />
             </div>
             <div className="form-group">
               <label className="form-label">Last Name</label>
-              <input className="form-input" type="text" placeholder="e.g. Hassan" />
+              <input className="form-input" type="text" />
             </div>
           </div>
 
           <div className="form-group">
             <label className="form-label">University ID</label>
-            <input className="form-input" type="text" placeholder="e.g. 2223425678" />
+            <input className="form-input" type="text" />
           </div>
 
           <div className="form-group">
             <label className="form-label">Email</label>
-            <input className="form-input" type="email" placeholder="e.g. example@university.edu" />
+            <input className="form-input" type="email" />
           </div>
 
           <div className="form-group">

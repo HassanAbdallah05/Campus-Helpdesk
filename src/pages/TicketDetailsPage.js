@@ -35,9 +35,7 @@ function TicketDetailsPage() {
               <div><div className="info-label">STATUS</div><div className="info-value">In Progress</div></div>
               <div><div className="info-label">DATE SUBMITTED</div><div className="info-value">25 Feb 2026</div></div>
               <div><div className="info-label">LAST UPDATED</div><div className="info-value">25 Feb 2026, 04:15 PM</div></div>
-              <div><div className="info-label">ASSIGNED TO</div><div className="info-value">IT Technician — Unit 3</div></div>
-              <div><div className="info-label">RESPONSE SLA</div><div className="info-value">24 hours</div></div>
-              <div><div className="info-label">RESOLUTION SLA</div><div className="info-value">72 hours</div></div>
+           
             </div>
 
             <div className="attached-image">
@@ -82,7 +80,6 @@ function TicketDetailsPage() {
                 <div className="thread-avatar thread-avatar-admin">IT</div>
                 <div className="thread-body">
                   <div className="thread-head">
-                    <strong>IT Support Team</strong>
                     <span className="tag tag-admin">Admin</span>
                     <span className="muted">25 Feb 2026, 10:32 AM</span>
                   </div>
@@ -109,22 +106,6 @@ function TicketDetailsPage() {
             </ul>
           </div>
 
-          <div className="card">
-            <h4 className="section-title">Assigned Staff</h4>
-            <div className="staff-row">
-              <div className="thread-avatar thread-avatar-admin">IT</div>
-              <div>
-                <strong>IT Technician</strong>
-                <div className="muted">Unit 3 — IT Services</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <h4 className="section-title">Actions</h4>
-            <button className="btn btn-secondary btn-block">Mark as Resolved</button>
-            <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }}>Close Ticket</button>
-          </div>
         </aside>
       </div>
     </>

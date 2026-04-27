@@ -7,12 +7,12 @@ function LoginPage() {
       <div className="auth-card">
         <div className="auth-logo">CH</div>
         <h1 className="auth-title">Campus Helpdesk — Login</h1>
-        <p className="auth-subtitle">Sign in with your university credentials</p>
+        <br></br>
 
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="form-group">
             <label className="form-label" htmlFor="universityId">University ID</label>
-            <input id="universityId" className="form-input" type="text" placeholder="e.g. U12345678" />
+            <input id="universityId" className="form-input" type="text"  />
           </div>
 
           <div className="form-group">
