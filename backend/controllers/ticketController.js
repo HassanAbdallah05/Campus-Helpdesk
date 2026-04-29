@@ -1,6 +1,8 @@
 const Ticket = require("../models/Ticket");
 const TicketStatusHistory = require("../models/TicketStatusHistory");
+const Location = require("../models/Location");
 
+// Generate unique ticket code
 const generateTicketCode = async () => {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
   const ticketCode = `TK-${randomNumber}`;
@@ -17,11 +19,33 @@ const generateTicketCode = async () => {
 // Create ticket
 const createTicket = async (req, res) => {
   try {
-    const { categoryh, title, description, location_id, image_path } = req.body;
+    const {
+      category,
+      title,
+      description,
+      college,
+      building,
+      room_number,
+      image_path,
+    } = req.body;
 
-    if (!category || !title || !description || !location_id) {
+    if (!category || !title || !description || !college || !building) {
       return res.status(400).json({
         message: "Please fill all required fields",
+      });
+    }
+
+    let location = await Location.findOne({
+      college,
+      building,
+      room_number: room_number || null,
+    });
+
+    if (!location) {
+      location = await Location.create({
+        college,
+        building,
+        room_number: room_number || null,
       });
     }
 
@@ -33,7 +57,7 @@ const createTicket = async (req, res) => {
       category,
       title,
       description,
-      location_id,
+      location_id: location._id,
       image_path: image_path || null,
       status: "Open",
     });
@@ -50,7 +74,7 @@ const createTicket = async (req, res) => {
   }
 };
 
-// Get tickets with optional status filter
+// Get all tickets (with filter)
 const getAllTickets = async (req, res) => {
   try {
     const { status } = req.query;
@@ -108,7 +132,7 @@ const getTicketById = async (req, res) => {
   }
 };
 
-// Update ticket status - Admin only
+// Update ticket status (Admin only)
 const updateTicket = async (req, res) => {
   try {
     const { status } = req.body;
@@ -151,6 +175,7 @@ const updateTicket = async (req, res) => {
 
     ticket.status = status;
 
+    // Save status history
     await TicketStatusHistory.create({
       ticket_id: ticket._id,
       changed_by: req.user._id,
@@ -171,9 +196,27 @@ const updateTicket = async (req, res) => {
   }
 };
 
+// Get ticket status history
+const getTicketHistory = async (req, res) => {
+  try {
+    const history = await TicketStatusHistory.find({
+      ticket_id: req.params.id,
+    })
+      .populate("changed_by", "fname lname email")
+      .sort({ changed_at: -1 });
+
+    res.status(200).json(history);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createTicket,
   getAllTickets,
   getTicketById,
   updateTicket,
+  getTicketHistory,
 };
