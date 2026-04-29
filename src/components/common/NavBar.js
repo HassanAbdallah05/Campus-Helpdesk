@@ -26,7 +26,7 @@ function NavBar({ variant = "student" }) {
           )}
         </ul>
         <div className="navbar-user">
-          <span className="navbar-user-name">{isAdmin ? "IT Support Team" : "Student Name"}</span>
+    
           <Link to={isAdmin ? "/admin/login" : "/login"} className="navbar-logout">Logout</Link>
         </div>
       </div>
