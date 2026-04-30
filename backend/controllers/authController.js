@@ -49,6 +49,39 @@ const registerUser = async (req, res) => {
       });
     }
 
+    // KU ID validation
+    // Must be 10 digits and start from 215 to 225
+    // Example: 2151190000 = 2015, 2221190000 = 2022
+    const kuIdRegex = /^(21[5-9]|22[0-5])\d{7}$/;
+
+    if (!kuIdRegex.test(university_id)) {
+      return res.status(400).json({
+        message:
+          "Invalid KU ID. KU ID must be 10 digits and start with a year from 2015 to 2025.",
+      });
+    }
+
+    // KU email validation
+    const kuEmailRegex = /^[^\s@]+@ku\.edu\.kw$/;
+
+    if (!kuEmailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Invalid email. Email must end with @ku.edu.kw",
+      });
+    }
+
+    // Strong password validation
+    // At least 8 characters, one uppercase, one lowercase, one number, one special character
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
+      return res.status(400).json({
+        message:
+          "Password must be at least 8 characters and include uppercase letter, lowercase letter, number, and special character.",
+      });
+    }
+
     // Check password confirmation
     if (password !== confirmPassword) {
       return res.status(400).json({
@@ -87,10 +120,9 @@ const registerUser = async (req, res) => {
       lname,
       email,
       password: hashedPassword,
-      role_id: role_id || 1, // default = student
+      role_id: role_id || 1,
     });
 
-    // Send response with token
     res.status(201).json({
       message: "User registered successfully",
       token: generateToken(user),
@@ -116,24 +148,20 @@ const loginUser = async (req, res) => {
   try {
     const { university_id, password } = req.body;
 
-    // Check required fields
     if (!university_id || !password) {
       return res.status(400).json({
         message: "Please provide university ID and password",
       });
     }
 
-    // Find user by university_id
     const user = await User.findOne({ university_id });
 
-    // Check if user exists
     if (!user) {
       return res.status(401).json({
         message: "Invalid university ID or password",
       });
     }
 
-    // Compare typed password with hashed password in database
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -142,7 +170,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Send success response with token
     res.status(200).json({
       message: "Login successful",
       token: generateToken(user),
@@ -162,6 +189,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   registerUser,
   loginUser,
