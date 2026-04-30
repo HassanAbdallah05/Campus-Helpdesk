@@ -109,7 +109,6 @@ function AdminRegisterPage() {
             <input
               className="form-input"
               type="password"
-              placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -121,7 +120,6 @@ function AdminRegisterPage() {
             <input
               className="form-input"
               type="password"
-              placeholder="Re-enter password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
