@@ -10,9 +10,10 @@ const {
 } = require("../controllers/ticketController");
 
 const { protect } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 // Create ticket
-router.post("/", protect, createTicket);
+router.post("/", protect, upload.single("image"), createTicket);
 
 // Get all tickets
 router.get("/", protect, getAllTickets);

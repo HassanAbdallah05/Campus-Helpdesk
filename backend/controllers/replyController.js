@@ -4,13 +4,15 @@ const Ticket = require("../models/Ticket");
 // Create a new reply
 const createReply = async (req, res) => {
   try {
-    const { ticket_id, message, image_path } = req.body;
+    const { ticket_id, message } = req.body;
 
     if (!ticket_id || !message) {
       return res.status(400).json({
         message: "Ticket ID and message are required",
       });
     }
+
+    const image_path = req.file ? req.file.path : null;
 
     const ticket = await Ticket.findById(ticket_id);
 
@@ -35,7 +37,7 @@ const createReply = async (req, res) => {
       ticket_id: ticket._id,
       sender_id: req.user._id,
       message,
-      image_path: image_path || null,
+      image_path,
     });
 
     res.status(201).json({
