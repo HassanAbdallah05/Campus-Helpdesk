@@ -64,7 +64,6 @@ function LoginPage() {
               id="password"
               className="form-input"
               type="password"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -82,11 +81,7 @@ function LoginPage() {
       </div>
 
       <div className="auth-page-nav">
-        <span className="current">1. Login</span>
-        <Link to="/signup">2. Sign Up</Link>
-        <Link to="/submit-ticket">3. Report</Link>
-        <Link to="/my-tickets">4. Tickets</Link>
-        <Link to="/admin/login">5. Admin</Link>
+        <Link to="/admin/login">Admin</Link>
       </div>
     </>
   );

@@ -1,49 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getTickets, updateTicketStatus } from "../api/api";
 import "../styles/AdminDashboard.css";
-
-const DUMMY_TICKETS = [
-  {
-    id: "TKT-0042",
-    student: "John Dela Cruz",
-    studentId: "STU-20250001",
-    category: "IT Support",
-    location: "Block B — Hall 3",
-    status: "In Progress",
-    date: "25 Feb 2026",
-    assignee: "IT Technician",
-  },
-  {
-    id: "TKT-0041",
-    student: "Maria Santos",
-    studentId: "STU-20250007",
-    category: "Facilities",
-    location: "Main Library — F2",
-    status: "Open",
-    date: "24 Feb 2026",
-    assignee: "—",
-  },
-  {
-    id: "TKT-0039",
-    student: "Ana Lim",
-    studentId: "STU-20250301",
-    category: "Library",
-    location: "Online Portal",
-    status: "In Progress",
-    date: "23 Feb 2026",
-    assignee: "Library Staff",
-  },
-  {
-    id: "TKT-0037",
-    student: "Rosa Mendoza",
-    studentId: "STU-20250206",
-    category: "IT Support",
-    location: "Computer Lab 204",
-    status: "Resolved",
-    date: "20 Feb 2026",
-    assignee: "IT Technician",
-  },
-];
 
 const statusBadgeClass = (s) => {
   const map = {
@@ -56,6 +14,91 @@ const statusBadgeClass = (s) => {
 };
 
 function AdminDashboard() {
+  const [tickets, setTickets] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const [statusChanges, setStatusChanges] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function loadTickets() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await getTickets(statusFilter);
+
+      if (Array.isArray(data)) {
+        setTickets(data);
+      } else {
+        setError(data.message || "Failed to load tickets");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Server error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadTickets();
+  }, [statusFilter]);
+
+  async function handleUpdate(ticketId, currentStatus) {
+    const newStatus = statusChanges[ticketId] || currentStatus;
+
+    if (newStatus === currentStatus) {
+      alert("Ticket already has this status");
+      return;
+    }
+
+    try {
+      const data = await updateTicketStatus(ticketId, newStatus);
+
+      if (data.ticket) {
+        alert("Ticket status updated successfully");
+        loadTickets();
+      } else {
+        alert(data.message || "Status update failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    }
+  }
+
+  function formatDate(dateValue) {
+    if (!dateValue) return "N/A";
+    return new Date(dateValue).toLocaleDateString();
+  }
+
+  function formatLocation(location) {
+    if (!location) return "No location";
+
+    return [location.college, location.building, location.room_number]
+      .filter(Boolean)
+      .join(" — ");
+  }
+
+  const filteredTickets = tickets.filter((ticket) => {
+    const studentName = `${ticket.user_id?.fname || ""} ${ticket.user_id?.lname || ""}`;
+    const text = `${ticket.ticket_code} ${ticket.title} ${ticket.category} ${studentName} ${ticket.user_id?.university_id || ""}`.toLowerCase();
+
+    const matchesSearch = text.includes(search.toLowerCase());
+    const matchesCategory =
+      categoryFilter === "All" || ticket.category === categoryFilter;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const total = tickets.length;
+  const open = tickets.filter((t) => t.status === "Open").length;
+  const inProgress = tickets.filter((t) => t.status === "In Progress").length;
+  const resolved = tickets.filter((t) => t.status === "Resolved").length;
+  const closed = tickets.filter((t) => t.status === "Closed").length;
+
   return (
     <>
       <div className="page-header">
@@ -63,8 +106,15 @@ function AdminDashboard() {
           <div>
             <h1 className="page-title">Admin Panel</h1>
           </div>
+
           <div className="admin-toolbar">
-            <input className="form-input" type="text" placeholder="Search tickets..." />
+            <input
+              className="form-input"
+              type="text"
+              placeholder="Search tickets..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
       </div>
@@ -72,48 +122,74 @@ function AdminDashboard() {
       <div className="admin-stats">
         <div className="stat-box">
           <div className="stat-label">TOTAL TICKETS</div>
-          <div className="stat-value">4</div>
+          <div className="stat-value">{total}</div>
           <div className="stat-hint">All time</div>
         </div>
+
         <div className="stat-box">
           <div className="stat-label">OPEN</div>
-          <div className="stat-value">1</div>
+          <div className="stat-value">{open}</div>
           <div className="stat-hint">Awaiting action</div>
         </div>
+
         <div className="stat-box">
           <div className="stat-label">IN PROGRESS</div>
-          <div className="stat-value">2</div>
+          <div className="stat-value">{inProgress}</div>
           <div className="stat-hint">Being handled</div>
         </div>
+
         <div className="stat-box">
           <div className="stat-label">RESOLVED</div>
-          <div className="stat-value">1</div>
+          <div className="stat-value">{resolved}</div>
           <div className="stat-hint">Completed</div>
         </div>
       </div>
 
       <div className="tickets-toolbar">
         <div className="tickets-tabs">
-          <button className="tab active">All Tickets (4)</button>
-          <button className="tab">Open (1)</button>
-          <button className="tab">In Progress (2)</button>
-          <button className="tab">Resolved (1)</button>
-          <button className="tab">Closed (0)</button>
+          {[
+            { label: `All Tickets (${total})`, value: "All" },
+            { label: `Open (${open})`, value: "Open" },
+            { label: `In Progress (${inProgress})`, value: "In Progress" },
+            { label: `Resolved (${resolved})`, value: "Resolved" },
+            { label: `Closed (${closed})`, value: "Closed" },
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              className={statusFilter === tab.value ? "tab active" : "tab"}
+              onClick={() => setStatusFilter(tab.value)}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
-        <select className="form-select">
-          <option>Category: All</option>
-          <option>IT Support & Equipment Support</option>
-          <option>Facilities</option>
-          <option>Library</option>
+
+        <select
+          className="form-select"
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="All">Category: All</option>
+          <option value="IT & Equipment Support">IT & Equipment Support</option>
+          <option value="Facilities">Facilities</option>
+          <option value="Library">Library</option>
+          <option value="Maintenance">Maintenance</option>
         </select>
       </div>
+
+      {loading && <p>Loading tickets...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && filteredTickets.length === 0 && (
+        <p>No tickets found.</p>
+      )}
 
       <div className="admin-table-wrap card">
         <table className="admin-table">
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>TICKET ID</th>
+              <br></br>
+              <th><pre>TICKET ID </pre></th>
               <th>STUDENT NAME</th>
               <th>CATEGORY</th>
               <th>LOCATION</th>
@@ -123,31 +199,66 @@ function AdminDashboard() {
               <th>ACTIONS</th>
             </tr>
           </thead>
+
           <tbody>
-            {DUMMY_TICKETS.map((t) => (
-              <tr key={t.id}>
-                <td><input type="checkbox" /></td>
-                <td><strong>{t.id}</strong></td>
+            {filteredTickets.map((t) => (
+              <tr key={t._id}>
                 <td>
-                  <div>{t.student}</div>
-                  <div className="muted">{t.studentId}</div>
+                  <input type="checkbox" />
                 </td>
-                <td>{t.category}</td>
-                <td>{t.location}</td>
-                <td><span className={statusBadgeClass(t.status)}>{t.status}</span></td>
-                <td>{t.date}</td>
-               
+
                 <td>
-                  <select className="form-select form-select-sm" defaultValue={t.status}>
+                  <strong>{t.ticket_code}</strong>
+                </td>
+
+                <td>
+                  <div>
+                    {t.user_id?.fname} {t.user_id?.lname}
+                  </div>
+                  <div className="muted">{t.user_id?.university_id}</div>
+                </td>
+
+                <td>{t.category}</td>
+
+                <td>{formatLocation(t.location_id)}</td>
+
+                <td>
+                  <span className={statusBadgeClass(t.status)}>
+                    {t.status}
+                  </span>
+                </td>
+
+                <td>{formatDate(t.created_at)}</td>
+
+                <td>
+                  <select
+                    className="form-select form-select-sm"
+                    value={statusChanges[t._id] || t.status}
+                    onChange={(e) =>
+                      setStatusChanges({
+                        ...statusChanges,
+                        [t._id]: e.target.value,
+                      })
+                    }
+                  >
                     <option>Open</option>
                     <option>In Progress</option>
                     <option>Resolved</option>
                     <option>Closed</option>
                   </select>
                 </td>
+
                 <td className="actions-cell">
-                  <Link to={`/admin/tickets/${t.id}`} className="btn-link">View</Link>
-                  <button className="btn-link btn-link-primary">Update</button>
+                  <Link to={`/admin/tickets/${t._id}`} className="btn-link">
+                    View
+                  </Link>
+
+                  <button
+                    className="btn-link btn-link-primary"
+                    onClick={() => handleUpdate(t._id, t.status)}
+                  >
+                    Update
+                  </button>
                 </td>
               </tr>
             ))}
