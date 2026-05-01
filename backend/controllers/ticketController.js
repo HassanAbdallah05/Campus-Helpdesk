@@ -26,15 +26,18 @@ const createTicket = async (req, res) => {
       college,
       building,
       room_number,
-      image_path,
     } = req.body;
 
+    // validation
     if (!category || !title || !description || !college || !building) {
       return res.status(400).json({
         message: "Please fill all required fields",
       });
     }
 
+    const image_path = req.file ? req.file.path : null;
+
+    // find or create location
     let location = await Location.findOne({
       college,
       building,
@@ -49,8 +52,10 @@ const createTicket = async (req, res) => {
       });
     }
 
+    // generate ticket code
     const ticketCode = await generateTicketCode();
 
+    // create ticket
     const ticket = await Ticket.create({
       ticket_code: ticketCode,
       user_id: req.user._id,
@@ -58,7 +63,7 @@ const createTicket = async (req, res) => {
       title,
       description,
       location_id: location._id,
-      image_path: image_path || null,
+      image_path, 
       status: "Open",
     });
 
@@ -67,6 +72,7 @@ const createTicket = async (req, res) => {
       ticket_code: ticket.ticket_code,
       ticket,
     });
+    
   } catch (error) {
     res.status(500).json({
       message: error.message,

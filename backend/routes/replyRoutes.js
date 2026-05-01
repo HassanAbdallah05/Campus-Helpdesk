@@ -7,9 +7,10 @@ const {
 } = require("../controllers/replyController");
 
 const { protect } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware"); 
 
-// Add reply
-router.post("/", protect, createReply);
+// Add reply 
+router.post("/", protect, upload.single("image"), createReply);
 
 // Get replies for one ticket
 router.get("/:ticketId", protect, getRepliesByTicket);
