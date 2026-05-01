@@ -16,13 +16,13 @@ const generateToken = (user) => {
   );
 };
 
-// Helper function to generate next custom user_id
+// Generate next custom user_id
 const getNextUserId = async () => {
   const lastUser = await User.findOne().sort({ user_id: -1 });
   return lastUser ? lastUser.user_id + 1 : 1;
 };
 
-// Register new user
+// Register new user/admin
 const registerUser = async (req, res) => {
   try {
     const {
@@ -35,7 +35,6 @@ const registerUser = async (req, res) => {
       role_id,
     } = req.body;
 
-    // Check required fields
     if (
       !university_id ||
       !fname ||
@@ -49,9 +48,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // KU ID validation
-    // Must be 10 digits and start from 215 to 225
-    // Example: 2151190000 = 2015, 2221190000 = 2022
+    // KU ID: 10 digits, starts from 215 to 225
     const kuIdRegex = /^(21[5-9]|22[0-5])\d{7}$/;
 
     if (!kuIdRegex.test(university_id)) {
@@ -61,17 +58,16 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // KU email validation
-    const kuEmailRegex = /^[^\s@]+@ku\.edu\.kw$/;
+    // Email must match the KU ID exactly
+    const expectedEmail = `s${university_id}@ku.edu.kw`;
 
-    if (!kuEmailRegex.test(email)) {
+    if (email.toLowerCase() !== expectedEmail) {
       return res.status(400).json({
-        message: "Invalid email. Email must end with @ku.edu.kw",
+        message: `Invalid email. Email must be ${expectedEmail}`,
       });
     }
 
-    // Strong password validation
-    // At least 8 characters, one uppercase, one lowercase, one number, one special character
+    // Strong password
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
@@ -82,14 +78,12 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // Check password confirmation
     if (password !== confirmPassword) {
       return res.status(400).json({
         message: "Passwords do not match",
       });
     }
 
-    // Check if university_id already exists
     const existingUniversityId = await User.findOne({ university_id });
     if (existingUniversityId) {
       return res.status(400).json({
@@ -97,28 +91,24 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // Check if email already exists
-    const existingEmail = await User.findOne({ email });
+    const existingEmail = await User.findOne({ email: email.toLowerCase() });
     if (existingEmail) {
       return res.status(400).json({
         message: "Email already exists",
       });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Generate custom user_id
     const nextUserId = await getNextUserId();
 
-    // Create user
     const user = await User.create({
       user_id: nextUserId,
       university_id,
       fname,
       lname,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       role_id: role_id || 1,
     });
