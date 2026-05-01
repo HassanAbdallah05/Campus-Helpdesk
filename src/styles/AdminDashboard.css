@@ -49,3 +49,11 @@
   text-decoration: none;
 }
 .btn-link-primary { color: var(--color-accent); font-weight: 600; }
+
+.ticket-row-completed {
+  opacity: 0.72;
+}
+
+.ticket-row-completed td {
+  background-color: #f8fafc;
+}

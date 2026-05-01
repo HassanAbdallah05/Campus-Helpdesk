@@ -1,31 +1,79 @@
-import React, { useState } from "react"; // added useState
-import { Link, useNavigate } from "react-router-dom"; // added useNavigate
-import { registerUser } from "../api/api"; // backend API function
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/api";
 
 function SignUpPage() {
-  const [fname, setFname] = useState(""); // backend expects fname
-  const [lname, setLname] = useState(""); // backend expects lname
-  const [universityId, setUniversityId] = useState(""); // input value
-  const [email, setEmail] = useState(""); // input value
-  const [password, setPassword] = useState(""); // input value
-  const [confirmPassword, setConfirmPassword] = useState(""); // input value
-  const [error, setError] = useState(""); // error message
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [universityId, setUniversityId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [error, setError] = useState("");
+
+  const [fieldErrors, setFieldErrors] = useState({
+    universityId: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const navigate = useNavigate();
 
+  function clearErrors() {
+    setError("");
+    setFieldErrors({
+      universityId: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  }
+
+  function handleBackendError(message) {
+    const errors = {
+      universityId: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (
+      message.includes("KU ID") ||
+      message.includes("University ID") ||
+      message.includes("university ID")
+    ) {
+      errors.universityId = message;
+    } else if (
+      message.includes("email") ||
+      message.includes("Email")
+    ) {
+      errors.email = message;
+    } else if (message.includes("Password must")) {
+      errors.password = message;
+    } else if (message.includes("Passwords do not match")) {
+      errors.confirmPassword = message;
+    } else {
+      setError(message);
+    }
+
+    setFieldErrors(errors);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
+    clearErrors();
 
     try {
       const data = await registerUser({
-        university_id: universityId, // backend expects university_id
+        university_id: universityId,
         fname,
         lname,
         email,
         password,
         confirmPassword,
-        role_id: 1, // student role
+        role_id: 1,
       });
 
       if (data.token) {
@@ -33,7 +81,7 @@ function SignUpPage() {
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/dashboard");
       } else {
-        setError(data.message || "Registration failed");
+        handleBackendError(data.message || "Registration failed");
       }
     } catch (err) {
       console.error(err);
@@ -84,6 +132,12 @@ function SignUpPage() {
               onChange={(e) => setUniversityId(e.target.value)}
               required
             />
+
+            {fieldErrors.universityId && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.universityId}
+              </p>
+            )}
           </div>
 
           <div className="form-group">
@@ -95,6 +149,12 @@ function SignUpPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+
+            {fieldErrors.email && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.email}
+              </p>
+            )}
           </div>
 
           <div className="form-group">
@@ -102,14 +162,20 @@ function SignUpPage() {
             <input
               className="form-input"
               type="password"
-              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
             <div className="form-hint">
-              Use at least 8 characters with numbers and letters.
+              Use at least 8 characters with uppercase, lowercase, number, and special character.
             </div>
+
+            {fieldErrors.password && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
 
           <div className="form-group">
@@ -117,11 +183,16 @@ function SignUpPage() {
             <input
               className="form-input"
               type="password"
-              placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+
+            {fieldErrors.confirmPassword && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.confirmPassword}
+              </p>
+            )}
           </div>
 
           <button type="submit" className="btn btn-primary btn-block">
@@ -132,14 +203,6 @@ function SignUpPage() {
         <div className="auth-footer">
           Already have an account? <Link to="/login">Login</Link>
         </div>
-      </div>
-
-      <div className="auth-page-nav">
-        <Link to="/login">1. Login</Link>
-        <span className="current">2. Sign Up</span>
-        <Link to="/submit-ticket">3. Report</Link>
-        <Link to="/my-tickets">4. Tickets</Link>
-        <Link to="/admin/login">5. Admin</Link>
       </div>
     </>
   );

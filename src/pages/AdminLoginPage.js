@@ -1,28 +1,29 @@
-import React, { useState } from "react"; // added useState
-import { Link, useNavigate } from "react-router-dom"; // added useNavigate
-import { loginUser } from "../api/api"; // use same backend login API
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../api/api";
 
 function AdminLoginPage() {
-  const [staffId, setStaffId] = useState(""); // stores staff/admin ID
-  const [password, setPassword] = useState(""); // stores password
-  const [error, setError] = useState(""); // stores error message
+  const [staffId, setStaffId] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // show/hide password
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
-    e.preventDefault(); // prevent page refresh
+    e.preventDefault();
     setError("");
 
     try {
       const data = await loginUser({
-        university_id: staffId, // backend expects university_id
+        university_id: staffId,
         password,
       });
 
       if (data.token && data.user?.role_id === 2) {
-        localStorage.setItem("token", data.token); // save JWT token
-        localStorage.setItem("user", JSON.stringify(data.user)); // save admin user
-        navigate("/admin/dashboard"); // go to admin dashboard
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/admin/dashboard");
       } else if (data.token && data.user?.role_id !== 2) {
         setError("Access denied. This account is not an admin.");
       } else {
@@ -56,16 +57,34 @@ function AdminLoginPage() {
 
         <div className="form-group">
           <label className="form-label">Password</label>
-          <input
-            className="form-input"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
 
-          <div className="form-hint" style={{ textAlign: "right" }}>
-            <a href="#forgot">Forgot password?</a>
+          <div style={{ position: "relative" }}>
+            <input
+              className="form-input"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ paddingRight: "80px" }}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "#334155",
+              }}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
         </div>
 

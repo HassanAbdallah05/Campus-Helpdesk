@@ -142,10 +142,6 @@ function MyTicketPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <select className="form-select">
-            <option>Sort: Newest</option>
-            <option>Sort: Oldest</option>
-          </select>
         </div>
       </div>
 
@@ -192,11 +188,7 @@ function MyTicketPage() {
           Showing {filteredTickets.length} of {tickets.length} tickets
         </span>
 
-        <div className="pagination-controls">
-          <button className="tab">←</button>
-          <button className="tab active">1</button>
-          <button className="tab">→</button>
-        </div>
+      
       </div>
     </>
   );

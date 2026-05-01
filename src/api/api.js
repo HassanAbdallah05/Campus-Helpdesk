@@ -2,7 +2,6 @@ const API_URL = "http://localhost:5001/api/auth";
 const TICKET_API_URL = "http://localhost:5001/api/tickets";
 const REPLY_API_URL = "http://localhost:5001/api/replies";
 
-
 // LOGIN
 export async function loginUser(userData) {
   const res = await fetch(`${API_URL}/login`, {
@@ -29,17 +28,32 @@ export async function registerUser(userData) {
   return res.json();
 }
 
-// CREATE TICKET
+// CREATE TICKET WITH IMAGE UPLOAD
 export async function createTicket(ticketData) {
   const token = localStorage.getItem("token");
+
+  const formData = new FormData();
+
+  formData.append("category", ticketData.category);
+  formData.append("title", ticketData.title);
+  formData.append("description", ticketData.description);
+  formData.append("college", ticketData.college);
+  formData.append("building", ticketData.building);
+
+  if (ticketData.room_number) {
+    formData.append("room_number", ticketData.room_number);
+  }
+
+  if (ticketData.image) {
+    formData.append("image", ticketData.image);
+  }
 
   const res = await fetch(TICKET_API_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(ticketData),
+    body: formData,
   });
 
   return res.json();
@@ -103,17 +117,25 @@ export async function updateTicketStatus(id, status) {
   return res.json();
 }
 
-// CREATE REPLY
+// CREATE REPLY WITH OPTIONAL IMAGE UPLOAD
 export async function createReply(replyData) {
   const token = localStorage.getItem("token");
+
+  const formData = new FormData();
+
+  formData.append("ticket_id", replyData.ticket_id);
+  formData.append("message", replyData.message);
+
+  if (replyData.image) {
+    formData.append("image", replyData.image);
+  }
 
   const res = await fetch(REPLY_API_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(replyData),
+    body: formData,
   });
 
   return res.json();

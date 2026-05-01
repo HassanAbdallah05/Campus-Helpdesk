@@ -1,11 +1,12 @@
-import React, { useState } from "react"; // added state
-import { Link, useNavigate } from "react-router-dom"; // added navigation
-import { loginUser } from "../api/api"; // backend API function
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../api/api";
 
 function LoginPage() {
-  const [universityId, setUniversityId] = useState(""); // input value
-  const [password, setPassword] = useState(""); // input value
-  const [error, setError] = useState(""); // error message
+  const [universityId, setUniversityId] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // show/hide password
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ function LoginPage() {
 
     try {
       const data = await loginUser({
-        university_id: universityId, // backend expects university_id
+        university_id: universityId,
         password,
       });
 
@@ -60,14 +61,36 @@ function LoginPage() {
             <label className="form-label" htmlFor="password">
               Password
             </label>
-            <input
-              id="password"
-              className="form-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+            <div style={{ position: "relative" }}>
+              <input
+                id="password"
+                className="form-input"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ paddingRight: "80px" }}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  border: "none",
+                  background: "transparent",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  color: "#334155",
+                }}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="btn btn-primary btn-block">

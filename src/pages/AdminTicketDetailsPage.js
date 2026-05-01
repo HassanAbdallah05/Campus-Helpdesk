@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   getTicketById,
@@ -20,16 +20,24 @@ const statusBadgeClass = (status) => {
   return map[status] || "badge";
 };
 
+const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg"];
+
 function AdminTicketDetailsPage() {
   const { id } = useParams();
+  const fileInputRef = useRef(null);
 
   const [ticket, setTicket] = useState(null);
   const [history, setHistory] = useState([]);
   const [replies, setReplies] = useState([]);
+
   const [replyMessage, setReplyMessage] = useState("");
+  const [replyImageFile, setReplyImageFile] = useState(null);
+  const [selectedReplyImageName, setSelectedReplyImageName] = useState("");
+
   const [selectedStatus, setSelectedStatus] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
 
   async function loadTicketDetails() {
     try {
@@ -66,6 +74,32 @@ function AdminTicketDetailsPage() {
     loadTicketDetails();
   }, [id]);
 
+  function handleReplyImageChange(e) {
+    const file = e.target.files[0];
+
+    if (!file) {
+      setReplyImageFile(null);
+      setSelectedReplyImageName("");
+      return;
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      alert("Only PNG and JPEG images are allowed.");
+
+      setReplyImageFile(null);
+      setSelectedReplyImageName("");
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      return;
+    }
+
+    setReplyImageFile(file);
+    setSelectedReplyImageName(file.name);
+  }
+
   async function handleStatusUpdate() {
     if (!selectedStatus) {
       alert("Please select a status");
@@ -92,29 +126,6 @@ function AdminTicketDetailsPage() {
     }
   }
 
-  async function quickUpdateStatus(status) {
-    setSelectedStatus(status);
-
-    if (status === ticket.status) {
-      alert("Ticket already has this status");
-      return;
-    }
-
-    try {
-      const data = await updateTicketStatus(id, status);
-
-      if (data.ticket) {
-        alert(`Ticket marked as ${status}`);
-        loadTicketDetails();
-      } else {
-        alert(data.message || "Status update failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
-  }
-
   async function handleSendReply(e) {
     e.preventDefault();
 
@@ -127,11 +138,18 @@ function AdminTicketDetailsPage() {
       const data = await createReply({
         ticket_id: id,
         message: replyMessage,
-        image_path: null,
+        image: replyImageFile,
       });
 
       if (data.reply) {
         setReplyMessage("");
+        setReplyImageFile(null);
+        setSelectedReplyImageName("");
+
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+
         loadTicketDetails();
       } else {
         alert(data.message || "Failed to send reply");
@@ -145,14 +163,6 @@ function AdminTicketDetailsPage() {
   function formatDate(dateValue) {
     if (!dateValue) return "N/A";
     return new Date(dateValue).toLocaleString();
-  }
-
-  function formatLocation(location) {
-    if (!location) return "No location";
-
-    return [location.college, location.building, location.room_number]
-      .filter(Boolean)
-      .join(" — ");
   }
 
   function getInitials(user) {
@@ -235,9 +245,23 @@ function AdminTicketDetailsPage() {
               </div>
 
               <div>
-                <div className="info-label">LOCATION</div>
+                <div className="info-label">COLLEGE</div>
                 <div className="info-value">
-                  {formatLocation(ticket.location_id)}
+                  {ticket.location_id?.college || "N/A"}
+                </div>
+              </div>
+
+              <div>
+                <div className="info-label">BUILDING</div>
+                <div className="info-value">
+                  {ticket.location_id?.building || "N/A"}
+                </div>
+              </div>
+
+              <div>
+                <div className="info-label">ROOM / LAB</div>
+                <div className="info-value">
+                  {ticket.location_id?.room_number || "N/A"}
                 </div>
               </div>
 
@@ -248,12 +272,16 @@ function AdminTicketDetailsPage() {
 
               <div>
                 <div className="info-label">DATE SUBMITTED</div>
-                <div className="info-value">{formatDate(ticket.created_at)}</div>
+                <div className="info-value">
+                  {formatDate(ticket.created_at)}
+                </div>
               </div>
 
               <div>
                 <div className="info-label">LAST UPDATED</div>
-                <div className="info-value">{formatDate(ticket.updated_at)}</div>
+                <div className="info-value">
+                  {formatDate(ticket.updated_at)}
+                </div>
               </div>
 
               <div>
@@ -276,11 +304,6 @@ function AdminTicketDetailsPage() {
                   {ticket.user_id?.email || "N/A"}
                 </div>
               </div>
-
-              <div>
-                <div className="info-label">RESPONSE SLA</div>
-                <div className="info-value">24 hours</div>
-              </div>
             </div>
 
             <div className="attached-image">
@@ -290,8 +313,16 @@ function AdminTicketDetailsPage() {
 
             <div className="attached-image">
               <div className="info-label">ATTACHED IMAGE</div>
+
               {ticket.image_path ? (
-                <div className="image-placeholder">{ticket.image_path}</div>
+                <img
+                  src={`http://localhost:5001${ticket.image_path}`}
+                  alt="Ticket attachment"
+                  className="clickable-preview-image"
+                  onClick={() =>
+                    setPreviewImage(`http://localhost:5001${ticket.image_path}`)
+                  }
+                />
               ) : (
                 <div className="image-placeholder">No attachment</div>
               )}
@@ -304,19 +335,37 @@ function AdminTicketDetailsPage() {
               <span className="muted">{replies.length} replies</span>
             </div>
 
-            <form className="reply-box" onSubmit={handleSendReply}>
+            <form className="reply-box-modern" onSubmit={handleSendReply}>
               <label className="form-label">Admin Reply</label>
+
               <textarea
-                className="form-textarea"
+                className="form-textarea reply-textarea-modern"
                 placeholder="Type your admin response here..."
                 value={replyMessage}
                 onChange={(e) => setReplyMessage(e.target.value)}
               />
 
-              <div className="reply-actions">
-                <button className="btn btn-secondary" type="button" disabled>
-                  Attach file
-                </button>
+              <div className="reply-bottom-actions">
+                <div className="reply-upload-area">
+                  <label className="upload-corner-btn">
+                    Choose Image
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg"
+                      onChange={handleReplyImageChange}
+                      hidden
+                    />
+                  </label>
+
+                  <div className="reply-file-note">
+                    {selectedReplyImageName ? (
+                      <span>Selected file: {selectedReplyImageName}</span>
+                    ) : (
+                      <span>Allowed attachment types: PNG, JPG, JPEG only.</span>
+                    )}
+                  </div>
+                </div>
 
                 <button className="btn btn-primary" type="submit">
                   [ Send Reply ] →
@@ -325,9 +374,7 @@ function AdminTicketDetailsPage() {
             </form>
 
             <div className="thread">
-              {replies.length === 0 && (
-                <p className="muted">No replies yet.</p>
-              )}
+              {replies.length === 0 && <p className="muted">No replies yet.</p>}
 
               {replies.map((reply) => {
                 const isAdmin = reply.sender_id?.role_id === 2;
@@ -362,9 +409,16 @@ function AdminTicketDetailsPage() {
                       <p>{reply.message}</p>
 
                       {reply.image_path && (
-                        <div className="image-placeholder">
-                          {reply.image_path}
-                        </div>
+                        <img
+                          src={`http://localhost:5001${reply.image_path}`}
+                          alt="Reply attachment"
+                          className="reply-image-preview clickable-preview-image"
+                          onClick={() =>
+                            setPreviewImage(
+                              `http://localhost:5001${reply.image_path}`
+                            )
+                          }
+                        />
                       )}
                     </div>
                   </div>
@@ -392,36 +446,11 @@ function AdminTicketDetailsPage() {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Assign To</label>
-              <select className="form-select" defaultValue="IT Technician">
-                <option>IT Technician</option>
-                <option>Library Staff</option>
-                <option>Facilities Team</option>
-              </select>
-            </div>
-
             <button
               className="btn btn-primary btn-block"
               onClick={handleStatusUpdate}
             >
               Save Changes
-            </button>
-
-            <button
-              className="btn btn-secondary btn-block"
-              style={{ marginTop: 8 }}
-              onClick={() => quickUpdateStatus("Resolved")}
-            >
-              Mark as Resolved
-            </button>
-
-            <button
-              className="btn btn-secondary btn-block"
-              style={{ marginTop: 8 }}
-              onClick={() => quickUpdateStatus("Closed")}
-            >
-              Close Ticket
             </button>
           </div>
 
@@ -430,7 +459,13 @@ function AdminTicketDetailsPage() {
 
             <ul className="timeline">
               {["Open", "In Progress", "Resolved", "Closed"].map((status) => {
-                const statusOrder = ["Open", "In Progress", "Resolved", "Closed"];
+                const statusOrder = [
+                  "Open",
+                  "In Progress",
+                  "Resolved",
+                  "Closed",
+                ];
+
                 const currentIndex = statusOrder.indexOf(ticket.status);
                 const statusIndex = statusOrder.indexOf(status);
 
@@ -451,20 +486,30 @@ function AdminTicketDetailsPage() {
               })}
             </ul>
           </div>
-
-          <div className="card">
-            <h4 className="section-title">Assigned Staff</h4>
-
-            <div className="staff-row">
-              <div className="thread-avatar thread-avatar-admin">IT</div>
-              <div>
-                <strong>IT Technician</strong>
-                <div className="muted">Unit 3 — IT Services</div>
-              </div>
-            </div>
-          </div>
         </aside>
       </div>
+
+      {previewImage && (
+        <div
+          className="image-preview-overlay"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div
+            className="image-preview-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="image-preview-close"
+              type="button"
+              onClick={() => setPreviewImage(null)}
+            >
+              ×
+            </button>
+
+            <img src={previewImage} alt="Preview" />
+          </div>
+        </div>
+      )}
     </>
   );
 }

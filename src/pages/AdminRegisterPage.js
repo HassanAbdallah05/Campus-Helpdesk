@@ -1,46 +1,102 @@
-import React, { useState } from "react"; // added useState
-import { Link, useNavigate } from "react-router-dom"; // added useNavigate
-import { registerUser } from "../api/api"; // backend register API
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/api";
 
 function AdminRegisterPage() {
-  const [fname, setFname] = useState(""); // first name
-  const [lname, setLname] = useState(""); // last name
-  const [staffId, setStaffId] = useState(""); // backend uses university_id
-  const [email, setEmail] = useState(""); // email
-  const [password, setPassword] = useState(""); // password
-  const [confirmPassword, setConfirmPassword] = useState(""); // confirm password
-  const [accessCode, setAccessCode] = useState(""); // simple admin code
-  const [error, setError] = useState(""); // error message
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [staffId, setStaffId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [accessCode, setAccessCode] = useState("");
+
+  const [error, setError] = useState("");
+
+  const [fieldErrors, setFieldErrors] = useState({
+    staffId: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    accessCode: "",
+  });
 
   const navigate = useNavigate();
 
+  function clearErrors() {
+    setError("");
+    setFieldErrors({
+      staffId: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      accessCode: "",
+    });
+  }
+
+  function handleBackendError(message) {
+    const errors = {
+      staffId: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      accessCode: "",
+    };
+
+    if (
+      message.includes("KU ID") ||
+      message.includes("University ID") ||
+      message.includes("university ID")
+    ) {
+      errors.staffId = message;
+    } else if (
+      message.includes("email") ||
+      message.includes("Email")
+    ) {
+      errors.email = message;
+    } else if (message.includes("Password must")) {
+      errors.password = message;
+    } else if (message.includes("Passwords do not match")) {
+      errors.confirmPassword = message;
+    } else {
+      setError(message);
+    }
+
+    setFieldErrors(errors);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
+    clearErrors();
 
-    // temporary frontend-only admin code check
     if (accessCode !== "ADMIN123") {
-      setError("Invalid admin access code");
+      setFieldErrors({
+        staffId: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        accessCode: "Invalid admin access code",
+      });
       return;
     }
 
     try {
       const data = await registerUser({
-        university_id: staffId, // backend expects university_id
+        university_id: staffId,
         fname,
         lname,
         email,
         password,
         confirmPassword,
-        role_id: 2, // admin role
+        role_id: 2,
       });
 
       if (data.token) {
-        localStorage.setItem("token", data.token); // save token
-        localStorage.setItem("user", JSON.stringify(data.user)); // save admin data
-        navigate("/admin/dashboard"); // go to admin dashboard
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/admin/dashboard");
       } else {
-        setError(data.message || "Admin registration failed");
+        handleBackendError(data.message || "Admin registration failed");
       }
     } catch (err) {
       console.error(err);
@@ -90,6 +146,12 @@ function AdminRegisterPage() {
             onChange={(e) => setStaffId(e.target.value)}
             required
           />
+
+          {fieldErrors.staffId && (
+            <p style={{ color: "red", marginTop: "6px" }}>
+              {fieldErrors.staffId}
+            </p>
+          )}
         </div>
 
         <div className="form-group">
@@ -101,6 +163,12 @@ function AdminRegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
+          {fieldErrors.email && (
+            <p style={{ color: "red", marginTop: "6px" }}>
+              {fieldErrors.email}
+            </p>
+          )}
         </div>
 
         <div className="form-row">
@@ -113,6 +181,16 @@ function AdminRegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
+            <div className="form-hint">
+              Use at least 8 characters with uppercase, lowercase, number, and special character.
+            </div>
+
+            {fieldErrors.password && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
 
           <div className="form-group">
@@ -124,6 +202,12 @@ function AdminRegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+
+            {fieldErrors.confirmPassword && (
+              <p style={{ color: "red", marginTop: "6px" }}>
+                {fieldErrors.confirmPassword}
+              </p>
+            )}
           </div>
         </div>
 
@@ -136,6 +220,12 @@ function AdminRegisterPage() {
             onChange={(e) => setAccessCode(e.target.value)}
             required
           />
+
+          {fieldErrors.accessCode && (
+            <p style={{ color: "red", marginTop: "6px" }}>
+              {fieldErrors.accessCode}
+            </p>
+          )}
         </div>
 
         <button type="submit" className="btn btn-primary btn-block">

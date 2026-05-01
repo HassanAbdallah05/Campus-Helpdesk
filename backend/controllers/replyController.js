@@ -12,7 +12,7 @@ const createReply = async (req, res) => {
       });
     }
 
-    const image_path = req.file ? req.file.path : null;
+    const image_path = req.file ? `/uploads/${req.file.filename}` : null;
 
     const ticket = await Ticket.findById(ticket_id);
 
@@ -40,9 +40,14 @@ const createReply = async (req, res) => {
       image_path,
     });
 
+    const populatedReply = await Reply.findById(reply._id).populate(
+      "sender_id",
+      "fname lname email role_id"
+    );
+
     res.status(201).json({
       message: "Reply added successfully",
-      reply,
+      reply: populatedReply,
     });
   } catch (error) {
     res.status(500).json({

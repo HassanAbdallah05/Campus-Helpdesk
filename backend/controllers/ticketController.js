@@ -35,7 +35,9 @@ const createTicket = async (req, res) => {
       });
     }
 
-    const image_path = req.file ? req.file.path : null;
+    // save public path for frontend use
+    const image_path = req.file ? `/uploads/${req.file.filename}` : null;
+
 
     // find or create location
     let location = await Location.findOne({
