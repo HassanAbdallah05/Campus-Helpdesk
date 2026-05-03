@@ -44,7 +44,11 @@ npm install
 ### 1. Run the Backend
 
 ```bash
-npm start
+cd backend
+```
+
+```bash
+npm run dev
 ```
 
 Backend runs on: http://localhost:5001
