@@ -17,21 +17,47 @@ Campus Helpdesk is a web-based ticketing system for Kuwait University. Students 
 - JWT
 - bcrypt
 
-## Installation & Run
+## Installation
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/HassanAbdallah05/Campus-Helpdesk.git
-cd Campus-Helpdesk
-cd backend
-npm install
-npm start
+```
 
-# open new terminal in the root folder
+```bash
+cd Campus-Helpdesk
+```
+
+### 2. Install Backend Dependencies
+
+```bash
+cd backend
+```
+
+```bash
+npm install
+```
+
+## How to Run
+
+### 1. Run the Backend
+
+```bash
 npm start
 ```
 
-Backend runs on: http://localhost:5001  
-Frontend runs on: http://localhost:3000  
+Backend runs on: http://localhost:5001
+
+### 2. Run the Frontend
+
+Open a new terminal in the project root folder.
+
+```bash
+npm start
+```
+
+Frontend runs on: http://localhost:3000
 
 ## Project Structure
 
@@ -64,20 +90,35 @@ Campus-Helpdesk/
 ## API Endpoints
 
 ### Authentication
+
 ```bash
 POST /api/auth/register
+```
+
+```bash
 POST /api/auth/login
 ```
 
 ### Tickets
+
 ```bash
 POST /api/tickets
+```
+
+```bash
 GET /api/tickets
+```
+
+```bash
 GET /api/tickets/:id
+```
+
+```bash
 PUT /api/tickets/:id/status
 ```
 
 ### Replies
+
 ```bash
 POST /api/replies
 ```
