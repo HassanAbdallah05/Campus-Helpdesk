@@ -1,0 +1,170 @@
+[{
+  "_id": {
+    "$oid": "69f24aac4d4c51142e46cf3a"
+  },
+  "ticket_id": {
+    "$oid": "69f24366c7cfe8c21ddd4a29"
+  },
+  "changed_by": {
+    "$oid": "69f244c7c7cfe8c21ddd4a2b"
+  },
+  "old_status": "Open",
+  "new_status": "In Progress",
+  "changed_at": {
+    "$date": "2026-04-29T18:15:08.742Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e630121b4a97219be06c"
+  },
+  "ticket_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "changed_by": {
+    "$oid": "69f3e5cf121b4a97219be06a"
+  },
+  "old_status": "Open",
+  "new_status": "Closed",
+  "changed_at": {
+    "$date": "2026-04-30T23:30:56.482Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e63e121b4a97219be06d"
+  },
+  "ticket_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "changed_by": {
+    "$oid": "69f3e5cf121b4a97219be06a"
+  },
+  "old_status": "Closed",
+  "new_status": "Resolved",
+  "changed_at": {
+    "$date": "2026-04-30T23:31:10.037Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e651121b4a97219be06e"
+  },
+  "ticket_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "changed_by": {
+    "$oid": "69f3e5cf121b4a97219be06a"
+  },
+  "old_status": "Resolved",
+  "new_status": "In Progress",
+  "changed_at": {
+    "$date": "2026-04-30T23:31:29.074Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4ea969ca232e303972034"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "Open",
+  "new_status": "In Progress",
+  "changed_at": {
+    "$date": "2026-05-01T18:01:58.568Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4eaa89ca232e303972035"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "In Progress",
+  "new_status": "Resolved",
+  "changed_at": {
+    "$date": "2026-05-01T18:02:16.078Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4ead69ca232e303972036"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "Resolved",
+  "new_status": "Closed",
+  "changed_at": {
+    "$date": "2026-05-01T18:03:02.369Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4eae59ca232e303972037"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "Closed",
+  "new_status": "Open",
+  "changed_at": {
+    "$date": "2026-05-01T18:03:17.486Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4eae69ca232e303972038"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "Open",
+  "new_status": "Resolved",
+  "changed_at": {
+    "$date": "2026-05-01T18:03:18.041Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4eb239ca232e303972039"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "changed_by": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "old_status": "Resolved",
+  "new_status": "Closed",
+  "changed_at": {
+    "$date": "2026-05-01T18:04:19.302Z"
+  },
+  "__v": 0
+}]
