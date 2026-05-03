@@ -43,6 +43,7 @@ function SubmitTicketPage() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
+
   const studentName = user
     ? `${user.fname} ${user.lname}`
     : "Logged-in Student";
@@ -56,10 +57,24 @@ function SubmitTicketPage() {
     }
   }
 
+  function handleTitleChange(e) {
+    const value = e.target.value;
+
+    // Allow English letters, Arabic letters, and spaces only
+    if (/^[A-Za-z\u0600-\u06FF\s]*$/.test(value)) {
+      setTitle(value);
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (!title.trim()) {
+      setError("Ticket title is required.");
+      return;
+    }
 
     try {
       const data = await createTicket({
@@ -215,11 +230,11 @@ function SubmitTicketPage() {
               className="form-input"
               type="text"
               inputMode="numeric"
-              maxLength={4}
+              maxLength={5}
               value={roomNumber}
               onChange={handleRoomNumberChange}
             />
-            <div className="form-hint">Numbers only. Max 4 digits.</div>
+            <div className="form-hint"> Max 5 digits.</div>
           </div>
 
           <div className="form-group">
@@ -229,10 +244,12 @@ function SubmitTicketPage() {
               type="text"
               maxLength={100}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={handleTitleChange}
               required
             />
-            <div className="form-hint">Max 100 characters</div>
+            <div className="form-hint">
+              Max 100 characters.
+            </div>
           </div>
 
           <div className="form-group">

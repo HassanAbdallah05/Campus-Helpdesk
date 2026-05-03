@@ -70,34 +70,6 @@ function AdminDashboard() {
     }
   }
 
-  async function handleCompleteToggle(ticketId, checked) {
-    const newStatus = checked ? "Resolved" : "Open";
-
-    try {
-      const data = await updateTicketStatus(ticketId, newStatus);
-
-      if (data.ticket) {
-        setTickets((prevTickets) =>
-          prevTickets.map((ticket) =>
-            ticket._id === ticketId
-              ? { ...ticket, status: newStatus }
-              : ticket
-          )
-        );
-
-        setStatusChanges((prev) => ({
-          ...prev,
-          [ticketId]: newStatus,
-        }));
-      } else {
-        alert(data.message || "Failed to update completion status");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
-  }
-
   function formatDate(dateValue) {
     if (!dateValue) return "N/A";
     return new Date(dateValue).toLocaleDateString();
@@ -106,9 +78,7 @@ function AdminDashboard() {
   function formatLocation(location) {
     if (!location) return "No location";
 
-    return [location.college]
-      .filter(Boolean)
-      .join(" — ");
+    return [location.college].filter(Boolean).join(" — ");
   }
 
   const filteredTickets = tickets.filter((ticket) => {
@@ -116,9 +86,9 @@ function AdminDashboard() {
       ticket.user_id?.lname || ""
     }`;
 
-    const text = `${ticket.ticket_code} ${ticket.title} ${ticket.category} ${studentName} ${
-      ticket.user_id?.university_id || ""
-    }`.toLowerCase();
+    const text = `${ticket.ticket_code} ${ticket.title} ${
+      ticket.category
+    } ${studentName} ${ticket.user_id?.university_id || ""}`.toLowerCase();
 
     const matchesSearch = text.includes(search.toLowerCase());
 
@@ -178,6 +148,12 @@ function AdminDashboard() {
           <div className="stat-value">{resolved}</div>
           <div className="stat-hint">Completed</div>
         </div>
+
+        <div className="stat-box">
+          <div className="stat-label">CLOSED</div>
+          <div className="stat-value">{closed}</div>
+          <div className="stat-hint">Finished</div>
+        </div>
       </div>
 
       <div className="tickets-toolbar">
@@ -223,7 +199,6 @@ function AdminDashboard() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>DONE</th>
               <th>TICKET ID</th>
               <th>STUDENT NAME</th>
               <th>CATEGORY</th>
@@ -236,81 +211,63 @@ function AdminDashboard() {
           </thead>
 
           <tbody>
-            {filteredTickets.map((t) => {
-              const isCompleted =
-                t.status === "Resolved" || t.status === "Closed";
+            {filteredTickets.map((t) => (
+              <tr key={t._id}>
+                <td>
+                  <strong>{t.ticket_code}</strong>
+                </td>
 
-              return (
-                <tr
-                  key={t._id}
-                  className={isCompleted ? "ticket-row-completed" : ""}
-                >
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={isCompleted}
-                      onChange={(e) =>
-                        handleCompleteToggle(t._id, e.target.checked)
-                      }
-                    />
-                  </td>
+                <td>
+                  <div>
+                    {t.user_id?.fname} {t.user_id?.lname}
+                  </div>
+                  <div className="muted">{t.user_id?.university_id}</div>
+                </td>
 
-                  <td>
-                    <strong>{t.ticket_code}</strong>
-                  </td>
+                <td>{t.category}</td>
 
-                  <td>
-                    <div>
-                      {t.user_id?.fname} {t.user_id?.lname}
-                    </div>
-                    <div className="muted">{t.user_id?.university_id}</div>
-                  </td>
+                <td>{formatLocation(t.location_id)}</td>
 
-                  <td>{t.category}</td>
+                <td>
+                  <span className={statusBadgeClass(t.status)}>
+                    {t.status}
+                  </span>
+                </td>
 
-                  <td>{formatLocation(t.location_id)}</td>
+                <td>{formatDate(t.created_at)}</td>
 
-                  <td>
-                    <span className={statusBadgeClass(t.status)}>
-                      {t.status}
-                    </span>
-                  </td>
+                <td>
+                  <select
+                    className="form-select form-select-sm"
+                    value={statusChanges[t._id] || t.status}
+                    onChange={(e) =>
+                      setStatusChanges({
+                        ...statusChanges,
+                        [t._id]: e.target.value,
+                      })
+                    }
+                  >
+                    <option>Open</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                    <option>Closed</option>
+                  </select>
+                </td>
 
-                  <td>{formatDate(t.created_at)}</td>
+                <td className="actions-cell">
+                  <Link to={`/admin/tickets/${t._id}`} className="btn-link">
+                    View
+                  </Link>
 
-                  <td>
-                    <select
-                      className="form-select form-select-sm"
-                      value={statusChanges[t._id] || t.status}
-                      onChange={(e) =>
-                        setStatusChanges({
-                          ...statusChanges,
-                          [t._id]: e.target.value,
-                        })
-                      }
-                    >
-                      <option>Open</option>
-                      <option>In Progress</option>
-                      <option>Resolved</option>
-                      <option>Closed</option>
-                    </select>
-                  </td>
-
-                  <td className="actions-cell">
-                    <Link to={`/admin/tickets/${t._id}`} className="btn-link">
-                      View
-                    </Link>
-
-                    <button
-                      className="btn-link btn-link-primary"
-                      onClick={() => handleUpdate(t._id, t.status)}
-                    >
-                      Update
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                  <button
+                    className="btn-link btn-link-primary"
+                    onClick={() => handleUpdate(t._id, t.status)}
+                  >
+                    Update
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

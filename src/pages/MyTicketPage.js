@@ -95,28 +95,33 @@ function MyTicketPage() {
 
       <div className="tickets-stats">
         <div className="stat-box">
+          <div className="stat-label">TOTAL TICKETS</div>
           <div className="stat-value">{total}</div>
-          <div className="stat-label">Total</div>
+          <div className="stat-hint">All time</div>
         </div>
 
         <div className="stat-box">
+          <div className="stat-label">OPEN</div>
           <div className="stat-value">{open}</div>
-          <div className="stat-label">Open</div>
+          <div className="stat-hint">Awaiting action</div>
         </div>
 
         <div className="stat-box">
+          <div className="stat-label">IN PROGRESS</div>
           <div className="stat-value">{inProgress}</div>
-          <div className="stat-label">In Progress</div>
+          <div className="stat-hint">Being handled</div>
         </div>
 
         <div className="stat-box">
+          <div className="stat-label">RESOLVED</div>
           <div className="stat-value">{resolved}</div>
-          <div className="stat-label">Resolved</div>
+          <div className="stat-hint">Completed</div>
         </div>
 
-        <div className="stat-box">
-          <div className="stat-value">{closed}</div>
+         <div className="stat-box">
           <div className="stat-label">Closed</div>
+          <div className="stat-value">{closed}</div>
+          <div className="stat-hint">Finished</div>
         </div>
       </div>
 

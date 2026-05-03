@@ -10,6 +10,9 @@ function SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [error, setError] = useState("");
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -45,10 +48,7 @@ function SignUpPage() {
       message.includes("university ID")
     ) {
       errors.universityId = message;
-    } else if (
-      message.includes("email") ||
-      message.includes("Email")
-    ) {
+    } else if (message.includes("email") || message.includes("Email")) {
       errors.email = message;
     } else if (message.includes("Password must")) {
       errors.password = message;
@@ -159,16 +159,28 @@ function SignUpPage() {
 
           <div className="form-group">
             <label className="form-label">Password</label>
-            <input
-              className="form-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+            <div className="password-field">
+              <input
+                className="form-input"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
 
             <div className="form-hint">
-              Use at least 8 characters with uppercase, lowercase, number, and special character.
+              Use at least 8 characters with uppercase, lowercase, number, and
+              special character.
             </div>
 
             {fieldErrors.password && (
@@ -180,13 +192,24 @@ function SignUpPage() {
 
           <div className="form-group">
             <label className="form-label">Confirm Password</label>
-            <input
-              className="form-input"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+
+            <div className="password-field">
+              <input
+                className="form-input"
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
 
             {fieldErrors.confirmPassword && (
               <p style={{ color: "red", marginTop: "6px" }}>

@@ -7,3 +7,22 @@
 @media (max-width: 540px) {
   .auth-card .form-row { grid-template-columns: 1fr; }
 }
+
+.password-field {
+  position: relative;
+}
+
+.password-field .form-input {
+  padding-right: 80px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
