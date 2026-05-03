@@ -1,0 +1,39 @@
+[{
+  "_id": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "user_id": 5,
+  "university_id": "2220000000",
+  "fname": "Bahjat",
+  "lname": "Kraty",
+  "email": "s2220000000@ku.edu.kw",
+  "password": "$2b$10$5lwwSOiXEob925VxSUIvw.6Q576AD6UwwvXBJdEXazsGl8l2Z06mO",
+  "role_id": 2,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4e8cc9ca232e30397202e"
+  },
+  "user_id": 6,
+  "university_id": "2221190454",
+  "fname": "khaled",
+  "lname": "othman",
+  "email": "s2221190454@ku.edu.kw",
+  "password": "$2b$10$WCqE.vTQ.rA.M0Y1SlMD2upjcP3Fj6j4F4toghQ8vrhOfq37twA6.",
+  "role_id": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4e9119ca232e30397202f"
+  },
+  "user_id": 7,
+  "university_id": "2221190455",
+  "fname": "ali",
+  "lname": "jaber",
+  "email": "s2221190455@ku.edu.kw",
+  "password": "$2b$10$CLEdU5OhCwxfWhVLSccGuuTxjygFrlq3YfGlgYWA/tm8A7lV2vS3q",
+  "role_id": 1,
+  "__v": 0
+}]
