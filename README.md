@@ -135,6 +135,10 @@ POST /api/replies
 - Locations
 - TicketStatusHistory
 
+## Initial Database
+
+The initial MongoDB database export is included in the `database/` folder as JSON files for the required collections.
+
 ## Team Members
 
 - Mohamed Muhdi
