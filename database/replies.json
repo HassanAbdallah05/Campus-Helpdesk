@@ -1,0 +1,102 @@
+[{
+  "_id": {
+    "$oid": "69f24470c7cfe8c21ddd4a2a"
+  },
+  "ticket_id": {
+    "$oid": "69f24366c7cfe8c21ddd4a29"
+  },
+  "sender_id": {
+    "$oid": "69f23cec0e05c19e88fb723d"
+  },
+  "message": "We are working on this issue",
+  "image_path": null,
+  "created_at": {
+    "$date": "2026-04-29T17:48:32.467Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f246cec7cfe8c21ddd4a2c"
+  },
+  "ticket_id": {
+    "$oid": "69f24366c7cfe8c21ddd4a29"
+  },
+  "sender_id": {
+    "$oid": "69f23cec0e05c19e88fb723d"
+  },
+  "message": "We are working on it",
+  "image_path": null,
+  "created_at": {
+    "$date": "2026-04-29T17:58:38.987Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e507121b4a97219be069"
+  },
+  "ticket_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "sender_id": {
+    "$oid": "69f3e45e121b4a97219be066"
+  },
+  "message": "hello",
+  "image_path": null,
+  "created_at": {
+    "$date": "2026-04-30T23:25:59.060Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e616121b4a97219be06b"
+  },
+  "ticket_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "sender_id": {
+    "$oid": "69f3e5cf121b4a97219be06a"
+  },
+  "message": "hey there",
+  "image_path": null,
+  "created_at": {
+    "$date": "2026-04-30T23:30:30.618Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4ea519ca232e303972032"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "sender_id": {
+    "$oid": "69f4e5cc9ca232e30397202d"
+  },
+  "message": "hello , we are working on it",
+  "image_path": "/uploads/1777658449112-183701305.jpg",
+  "created_at": {
+    "$date": "2026-05-01T18:00:49.118Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4ea799ca232e303972033"
+  },
+  "ticket_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "sender_id": {
+    "$oid": "69f4e8cc9ca232e30397202e"
+  },
+  "message": "hello",
+  "image_path": null,
+  "created_at": {
+    "$date": "2026-05-01T18:01:29.822Z"
+  },
+  "__v": 0
+}]

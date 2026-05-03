@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "69f240ffc7cfe8c21ddd4a27"
+  },
+  "user_id": {
+    "$oid": "69f23cec0e05c19e88fb723d"
+  },
+  "ticket_code": "TK-8428",
+  "category": "IT & Equipment Support",
+  "title": "WiFi not working",
+  "status": "Open",
+  "image_path": null,
+  "description": "Internet is down in the lab",
+  "location_id": {
+    "$oid": "69f240ffc7cfe8c21ddd4a26"
+  },
+  "created_at": {
+    "$date": "2026-04-29T17:33:51.674Z"
+  },
+  "updated_at": {
+    "$date": "2026-04-29T17:33:51.674Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f24366c7cfe8c21ddd4a29"
+  },
+  "user_id": {
+    "$oid": "69f23cec0e05c19e88fb723d"
+  },
+  "ticket_code": "TK-9640",
+  "category": "Facilities",
+  "title": "AC not working",
+  "status": "In Progress",
+  "image_path": null,
+  "description": "Air conditioning is broken",
+  "location_id": {
+    "$oid": "69f24366c7cfe8c21ddd4a28"
+  },
+  "created_at": {
+    "$date": "2026-04-29T17:44:06.897Z"
+  },
+  "updated_at": {
+    "$date": "2026-04-29T18:15:08.751Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f3e4e4121b4a97219be068"
+  },
+  "user_id": {
+    "$oid": "69f3e45e121b4a97219be066"
+  },
+  "ticket_code": "TK-3551",
+  "category": "IT & Equipment Support",
+  "title": "projector error",
+  "status": "In Progress",
+  "image_path": null,
+  "description": "projector error need fix",
+  "location_id": {
+    "$oid": "69f3e4e4121b4a97219be067"
+  },
+  "created_at": {
+    "$date": "2026-04-30T23:25:24.335Z"
+  },
+  "updated_at": {
+    "$date": "2026-04-30T23:31:29.076Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4e9e29ca232e303972031"
+  },
+  "user_id": {
+    "$oid": "69f4e8cc9ca232e30397202e"
+  },
+  "ticket_code": "TK-7063",
+  "category": "IT & Equipment Support",
+  "title": "Printer",
+  "status": "Closed",
+  "image_path": "/uploads/1777658338665-745571894.jpg",
+  "description": "Printer not working",
+  "location_id": {
+    "$oid": "69f4e9e29ca232e303972030"
+  },
+  "created_at": {
+    "$date": "2026-05-01T17:58:58.683Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T18:04:19.304Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69f4ebe69ca232e30397203b"
+  },
+  "user_id": {
+    "$oid": "69f4e8cc9ca232e30397202e"
+  },
+  "ticket_code": "TK-9788",
+  "category": "Library",
+  "title": "book",
+  "status": "Open",
+  "image_path": null,
+  "description": "no",
+  "location_id": {
+    "$oid": "69f4ebe69ca232e30397203a"
+  },
+  "created_at": {
+    "$date": "2026-05-01T18:07:34.476Z"
+  },
+  "updated_at": {
+    "$date": "2026-05-01T18:07:34.476Z"
+  },
+  "__v": 0
+}]
