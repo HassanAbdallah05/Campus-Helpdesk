@@ -17,84 +17,81 @@ Campus Helpdesk is a web-based ticketing system for Kuwait University. Students 
 - JWT
 - bcrypt
 
-## Installation
+## Installation & Run
 
-### 1. Clone the Repository
-git clone https://github.com/HassanAbdallah05/Campus-Helpdesk.git  
-cd Campus-Helpdesk  
+```bash
+git clone https://github.com/HassanAbdallah05/Campus-Helpdesk.git
+cd Campus-Helpdesk
+cd backend
+npm install
+npm start
 
-### 2. Install Dependencies (Backend Only)
-cd backend  
-npm install  
+# open new terminal in the root folder
+npm start
+```
 
-## How to Run
-
-### 1. Run the Backend
-cd backend  
-npm start  
-
-Backend runs on:  
-http://localhost:5001  
-
-### 2. Run the Frontend
-Open a new terminal:  
-npm start  
-
-Frontend runs on:  
-http://localhost:3000  
+Backend runs on: http://localhost:5001  
+Frontend runs on: http://localhost:3000  
 
 ## Project Structure
 
-Campus-Helpdesk/  
-├── backend/  
-│   ├── config/  
-│   ├── controllers/  
-│   ├── middleware/  
-│   ├── models/  
-│   ├── routes/  
-│   └── server.js  
-│  
-├── src/  
-├── public/  
-├── package.json  
-└── README.md  
+```bash
+Campus-Helpdesk/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   └── server.js
+├── src/
+├── public/
+├── package.json
+└── README.md
+```
 
 ## Main Features
 
-- Student registration and login  
-- Admin authentication  
-- JWT-based protected routes  
-- Ticket creation and tracking  
-- Admin status update (Open, In Progress, Resolved, Closed)  
-- Reply system between students and admins  
-- Location-based ticket reporting  
-- MongoDB database integration  
+- Student registration and login
+- Admin authentication
+- JWT-based protected routes
+- Ticket creation and tracking
+- Admin status update (Open, In Progress, Resolved, Closed)
+- Reply system between students and admins
+- Location-based ticket reporting
+- MongoDB database integration
 
 ## API Endpoints
 
 ### Authentication
-POST /api/auth/register  
-POST /api/auth/login  
+```bash
+POST /api/auth/register
+POST /api/auth/login
+```
 
 ### Tickets
-POST /api/tickets  
-GET /api/tickets  
-GET /api/tickets/:id  
-PUT /api/tickets/:id/status  
+```bash
+POST /api/tickets
+GET /api/tickets
+GET /api/tickets/:id
+PUT /api/tickets/:id/status
+```
 
 ### Replies
-POST /api/replies  
+```bash
+POST /api/replies
+```
 
 ## Database Collections
 
-- Users  
-- Tickets  
-- Replies  
-- Locations  
-- TicketStatusHistory  
+- Users
+- Tickets
+- Replies
+- Locations
+- TicketStatusHistory
 
 ## Team Members
 
-- Mohamed Muhdi  
-- Khaled Bahjat  
-- Hassan Abdalla  
+- Mohamed Muhdi
+- Khaled Bahjat
+- Hassan Abdalla
