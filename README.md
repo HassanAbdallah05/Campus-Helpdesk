@@ -58,6 +58,10 @@ Backend runs on: http://localhost:5001
 Open a new terminal in the project root folder.
 
 ```bash
+npm install
+```
+
+```bash
 npm start
 ```
 
