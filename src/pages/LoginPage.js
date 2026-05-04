@@ -5,7 +5,7 @@ import { loginUser } from "../api/api";
 function LoginPage() {
   const [universityId, setUniversityId] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // show/hide password
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -21,8 +21,15 @@ function LoginPage() {
       });
 
       if (data.token) {
+        // Student login page must accept only student accounts
+        if (data.user.role_id !== 1) {
+          setError("Admins must use the admin login page.");
+          return;
+        }
+
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+
         navigate("/dashboard");
       } else {
         setError(data.message || "Login failed");

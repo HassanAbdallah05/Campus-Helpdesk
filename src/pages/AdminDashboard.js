@@ -47,28 +47,39 @@ function AdminDashboard() {
     loadTickets();
   }, [statusFilter]);
 
-  async function handleUpdate(ticketId, currentStatus) {
-    const newStatus = statusChanges[ticketId] || currentStatus;
+async function handleUpdate(ticketId, currentStatus) {
+  const newStatus = statusChanges[ticketId] || currentStatus;
 
-    if (newStatus === currentStatus) {
-      alert("Ticket already has this status");
-      return;
-    }
-
-    try {
-      const data = await updateTicketStatus(ticketId, newStatus);
-
-      if (data.ticket) {
-        alert("Ticket status updated successfully");
-        loadTickets();
-      } else {
-        alert(data.message || "Status update failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
+  if (newStatus === currentStatus) {
+    alert("Ticket already has this status");
+    return;
   }
+
+  try {
+    const data = await updateTicketStatus(ticketId, newStatus);
+
+    alert(data.message || "Ticket status updated successfully");
+
+    setStatusChanges((prev) => {
+      const updated = { ...prev };
+      delete updated[ticketId];
+      return updated;
+    });
+
+    loadTickets();
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Status update failed");
+
+    setStatusChanges((prev) => {
+      const updated = { ...prev };
+      delete updated[ticketId];
+      return updated;
+    });
+
+    loadTickets();
+  }
+}
 
   function formatDate(dateValue) {
     if (!dateValue) return "N/A";

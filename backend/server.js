@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const path = require("path");
+const multer = require("multer");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
@@ -39,6 +40,34 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/replies", replyRoutes);
+
+// Error handler for image upload errors
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({
+        message: "Image is too large. Maximum allowed size is 5 MB.",
+      });
+    }
+
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
+
+  if (
+    err.message === "Only JPEG and PNG images are allowed" ||
+    err.message === "Only JPEG, JPG, and PNG images are allowed"
+  ) {
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
+
+  return res.status(500).json({
+    message: err.message || "Server error",
+  });
+});
 
 // Start server
 const PORT = process.env.PORT || 5001;

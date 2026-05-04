@@ -100,31 +100,32 @@ function AdminTicketDetailsPage() {
     setSelectedReplyImageName(file.name);
   }
 
-  async function handleStatusUpdate() {
-    if (!selectedStatus) {
-      alert("Please select a status");
-      return;
-    }
-
-    if (selectedStatus === ticket.status) {
-      alert("Ticket already has this status");
-      return;
-    }
-
-    try {
-      const data = await updateTicketStatus(id, selectedStatus);
-
-      if (data.ticket) {
-        alert("Ticket status updated successfully");
-        loadTicketDetails();
-      } else {
-        alert(data.message || "Status update failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Server error");
-    }
+async function handleStatusUpdate() {
+  if (!selectedStatus) {
+    alert("Please select a status");
+    return;
   }
+
+  if (selectedStatus === ticket.status) {
+    alert("Ticket already has this status");
+    return;
+  }
+
+  try {
+    const data = await updateTicketStatus(id, selectedStatus);
+
+    alert(data.message || "Ticket status updated successfully");
+
+    setSelectedStatus("");
+    loadTicketDetails();
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Status update failed");
+
+    setSelectedStatus("");
+    loadTicketDetails();
+  }
+}
 
   async function handleSendReply(e) {
     e.preventDefault();

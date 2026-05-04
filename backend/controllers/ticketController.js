@@ -181,6 +181,23 @@ const updateTicket = async (req, res) => {
       });
     }
 
+    // Sequential status workflow
+    const allowedNextStatus = {
+      Open: "In Progress",
+      "In Progress": "Resolved",
+      Resolved: "Closed",
+      Closed: null,
+    };
+
+    if (allowedNextStatus[oldStatus] !== status) {
+      return res.status(400).json({
+        message:
+          oldStatus === "Closed"
+            ? "Closed tickets cannot be updated."
+            : `Invalid status change. Ticket must move from ${oldStatus} to ${allowedNextStatus[oldStatus]}.`,
+      });
+    }
+
     ticket.status = status;
 
     // Save status history
