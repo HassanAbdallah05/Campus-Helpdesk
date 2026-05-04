@@ -49,56 +49,5 @@
       "$date": "2026-05-01T18:03:02.369Z"
     },
     "__v": 0
-  },
-  {
-    "_id": {
-      "$oid": "69f4eae59ca232e303972037"
-    },
-    "ticket_id": {
-      "$oid": "69f4e9e29ca232e303972031"
-    },
-    "changed_by": {
-      "$oid": "69f4e5cc9ca232e30397202d"
-    },
-    "old_status": "Closed",
-    "new_status": "Open",
-    "changed_at": {
-      "$date": "2026-05-01T18:03:17.486Z"
-    },
-    "__v": 0
-  },
-  {
-    "_id": {
-      "$oid": "69f4eae69ca232e303972038"
-    },
-    "ticket_id": {
-      "$oid": "69f4e9e29ca232e303972031"
-    },
-    "changed_by": {
-      "$oid": "69f4e5cc9ca232e30397202d"
-    },
-    "old_status": "Open",
-    "new_status": "Resolved",
-    "changed_at": {
-      "$date": "2026-05-01T18:03:18.041Z"
-    },
-    "__v": 0
-  },
-  {
-    "_id": {
-      "$oid": "69f4eb239ca232e303972039"
-    },
-    "ticket_id": {
-      "$oid": "69f4e9e29ca232e303972031"
-    },
-    "changed_by": {
-      "$oid": "69f4e5cc9ca232e30397202d"
-    },
-    "old_status": "Resolved",
-    "new_status": "Closed",
-    "changed_at": {
-      "$date": "2026-05-01T18:04:19.302Z"
-    },
-    "__v": 0
   }
 ]
